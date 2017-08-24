@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+sds_host=`echo ${KYLO_SPRING_DATASOURCE_URL} | cut -d/ -f3 | cut -d: -f1`
+sds_port=`echo ${KYLO_SPRING_DATASOURCE_URL} | cut -d/ -f3 | cut -d: -f2`
+my_tcp_wait ${sds_host} ${sds_port}
+
+hds_host=`echo ${KYLO_HIVE_DATASOURCE_URL} | cut -d/ -f3 | cut -d: -f1`
+hds_port=`echo ${KYLO_HIVE_DATASOURCE_URL} | cut -d/ -f3 | cut -d: -f2`
+my_tcp_wait ${hds_host} ${hds_port}
+
+jms_host=`echo ${KYLO_JMS_ACTIVEMQ_BROKER_URL} | cut -d/ -f3 | cut -d: -f1`
+jms_port=`echo ${KYLO_JMS_ACTIVEMQ_BROKER_URL} | cut -d/ -f3 | cut -d: -f2`
+my_tcp_wait ${jms_host} ${jms_port}
+
+if [[ "x${KYLO_SEARCH_HOST}" != "x" ]]; then
+    my_tcp_wait ${KYLO_SEARCH_HOST} ${KYLO_SEARCH_RESTPORT}
+fi
+
+kylo-service start
+sleep infinity &
+wait $!
