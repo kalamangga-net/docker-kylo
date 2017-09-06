@@ -1,6 +1,6 @@
 FROM binhnv/hadoop-client
 
-ENV KYLO_VERSION=0.8.2 \
+ENV KYLO_VERSION=0.8.3 \
     KYLO_HOME="${MY_APP_DIR}/kylo"
 
 WORKDIR ${KYLO_HOME}
