@@ -10,12 +10,6 @@ jms_host=`echo ${KYLO_JMS_ACTIVEMQ_BROKER_URL} | cut -d/ -f3 | cut -d: -f1`
 jms_port=`echo ${KYLO_JMS_ACTIVEMQ_BROKER_URL} | cut -d/ -f3 | cut -d: -f2`
 my_tcp_wait ${jms_host} ${jms_port}
 
-if [[ "x${KYLO_SEARCH_HOST}" != "x" ]]; then
-    my_tcp_wait ${KYLO_SEARCH_HOST} ${KYLO_SEARCH_RESTPORT}
-    # creating search index
-    ${KYLO_HOME}/bin/create-kylo-indexes-es.sh ${KYLO_SEARCH_HOST} ${KYLO_SEARCH_RESTPORT} 1 1
-fi
-
 kylo-service start
 sleep infinity &
 wait $!
