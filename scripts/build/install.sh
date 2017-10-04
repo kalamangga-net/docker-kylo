@@ -37,9 +37,43 @@ function install_app {
     fi
 }
 
+function install_extra_libs() {
+    version=$1
+    install_dir=$2
+
+    extra_libs=(
+        "http://central.maven.org/maven2/com/thinkbiganalytics/kylo/integrations/kylo-jira-rest-client/${version}/kylo-jira-rest-client-${version}.jar"
+    )
+
+    for lib in "${extra_libs[@]}"; do
+        filename=${lib##*/}
+        curl -sL $lib -o "${install_dir}/${filename}"
+    done
+}
+
+function install_plugins() {
+    version=$1
+    install_dir=$2
+
+    plugins=(
+        'kylo-sla-email'
+        # 'kylo-sla-jira'
+    )
+    base_url="http://central.maven.org/maven2/com/thinkbiganalytics/kylo/plugins"
+
+    for plugin in "${plugins[@]}"; do
+        echo "Installing plugin ${plugin}"
+
+        file="${plugin}-${version}.jar"
+        curl -sL "${base_url}/${plugin}/${version}/${file}" -o "${install_dir}/${file}"
+    done
+}
+
 function main {
     install_app "https://s3-us-west-2.amazonaws.com/kylo-io/releases/tar/${KYLO_VERSION}/kylo-${KYLO_VERSION}.tar" ${KYLO_HOME}
     # install_app "https://s3-us-west-2.amazonaws.com/kylo-io/releases/deb/${KYLO_VERSION}/kylo-${KYLO_VERSION}.deb" ${KYLO_HOME}
+    install_plugins ${KYLO_VERSION} "${KYLO_HOME}/kylo-services/plugin"
+    # install_extra_libs ${KYLO_VERSION} "${KYLO_HOME}/kylo-services/lib"
 }
 
 main "$@"
