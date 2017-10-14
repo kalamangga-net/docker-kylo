@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-function add_users {
-    useradd -U -r -m -s /bin/bash kylo
-}
-
 function install_app {
     app_pkg=$1
     install_dir=$2
