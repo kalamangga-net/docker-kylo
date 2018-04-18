@@ -43,7 +43,8 @@ function install_extra_libs() {
 
     for lib in "${extra_libs[@]}"; do
         filename=${lib##*/}
-        curl -sL $lib -o "${install_dir}/${filename}"
+        echo "Downloading ${lib}..."
+        curl -sL ${lib} -o "${install_dir}/${filename}"
     done
 }
 
